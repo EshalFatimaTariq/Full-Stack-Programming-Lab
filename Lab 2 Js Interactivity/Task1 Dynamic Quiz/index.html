@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Tech Quiz (5 Questions)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h1>🚀 Tech Master Quiz</h1>
+        <p class="subtitle">Test your web dev knowledge!</p>
+        <hr>
+        
+        <div id="quiz-content">
+            <div class="question-group">
+                <label>1. Which HTML tag is used for the largest heading?</label>
+                <input type="text" id="q1" placeholder="Enter tag here...">
+            </div>
+
+            <div class="question-group">
+                <label>2. What symbol is used for IDs in CSS?</label>
+                <input type="text" id="q2" placeholder="Type symbol here...">
+            </div>
+
+            <div class="question-group">
+                <label>3. Is JavaScript the same as Java? (Yes/No)</label>
+                <input type="text" id="q3" placeholder="Answer here...">
+            </div>
+
+            <div class="question-group">
+                <label>4. Which property changes text color in CSS?</label>
+                <input type="text" id="q4" placeholder="Property name...">
+            </div>
+
+            <div class="question-group">
+                <label>5. Which keyword declares a constant in JS?</label>
+                <input type="text" id="q5" placeholder="Enter Keyword here">
+            </div>
+
+            <button onclick="calculateScore()" id="submit-btn">Finish Quiz</button>
+        </div>
+
+        <div id="result-area" class="hidden">
+            <div class="score-circle">
+                <span id="score-number">0</span>/5
+            </div>
+            <h2 id="feedback-msg"></h2>
+            <button onclick="resetQuiz()" class="reset-btn">Reset Quiz</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

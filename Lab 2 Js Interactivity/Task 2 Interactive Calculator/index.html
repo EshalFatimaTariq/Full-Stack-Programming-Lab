@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 Sparkle Calculator 🌸</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="calc-card">
+        <h2>Interactive Pink Calculator</h2>
+        
+        <input type="number" id="num1" class="input-box" placeholder="First Number">
+        
+        <select id="op">
+            <option value="+">Addition (+)</option>
+            <option value="-">Subtraction (-)</option>
+            <option value="*">Multiplication (×)</option>
+            <option value="/">Division (÷)</option>
+        </select>
+        
+        <input type="number" id="num2" class="input-box" placeholder="Second Number">
+
+        <button onclick="doMath()" id="calc-btn">Calculate! 💖</button>
+
+        <div id="output" class="result-box">Waiting for math...</div>
+
+        <button onclick="reset()" class="reset-btn">Clear All</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
