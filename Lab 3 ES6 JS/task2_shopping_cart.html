@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 03 – Task 2: Online Shopping Cart</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            color: #e2e8f0;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(52, 211, 153, 0.15);
+            border: 1px solid rgba(52, 211, 153, 0.4);
+            color: #34d399;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #34d399, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: #94a3b8;
+            margin-top: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 680px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 1.6rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .panel h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.7rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Products */
+        .product-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            transition: background 0.2s;
+        }
+
+        .product-icon {
+            font-size: 1.5rem;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .product-price {
+            font-size: 0.82rem;
+            color: #34d399;
+            margin-top: 2px;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #065f46, #34d399);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .btn-add:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: grid;
+            grid-column: 1 / -1;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #34d399, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* Cart list */
+        #cart-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        #cart-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            background: rgba(52, 211, 153, 0.07);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            border-radius: 10px;
+            padding: 0.55rem 0.9rem;
+            font-size: 0.9rem;
+            animation: pop 0.3s ease;
+        }
+
+        #cart-list li .item-icon {
+            font-size: 1.1rem;
+        }
+
+        /* First item highlight */
+        #first-item-box {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 0.9rem;
+            color: #38bdf8;
+            min-height: 50px;
+        }
+
+        .empty-state {
+            color: #64748b;
+            font-style: italic;
+            font-size: 0.88rem;
+        }
+
+        @keyframes pop {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="badge">Lab 03 – Task 2</div>
+        <h1>Online Shopping Cart</h1>
+        <p>Rest · Spread · Array Destructuring</p>
+    </header>
+
+    <div class="layout">
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number" id="total-count">0</div>
+                <div class="stat-label">Total Items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-price">$0</div>
+                <div class="stat-label">Total Price</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="remaining-count">0</div>
+                <div class="stat-label">Remaining Items</div>
+            </div>
+        </div>
+
+        <!-- Products Panel -->
+        <div class="panel">
+            <h2>🛍 Available Products</h2>
+            <div class="product-grid" id="product-list"></div>
+        </div>
+
+        <!-- Cart Panel -->
+        <div class="panel">
+            <h2>🛒 Your Cart</h2>
+            <ul id="cart-list">
+                <li class="empty-state">Cart is empty. Add some items!</li>
+            </ul>
+        </div>
+
+        <!-- First Item Panel -->
+        <div class="panel" style="grid-column: 1 / -1;">
+            <h2>📦 First Item in Cart (Destructuring)</h2>
+            <div id="first-item-box" class="empty-state">No items yet.</div>
+        </div>
+
+    </div>
+
+    <script>
+        // ─── Product Data ────────────────────────────────────────────────────────
+        const products = [
+            { id: 1, name: 'Wireless Headphones', price: 79.99, icon: '🎧' },
+            { id: 2, name: 'Mechanical Keyboard', price: 129.99, icon: '⌨️' },
+            { id: 3, name: 'USB-C Hub', price: 45.00, icon: '🔌' },
+            { id: 4, name: 'Webcam HD 1080p', price: 89.50, icon: '📷' },
+            { id: 5, name: 'Desk LED Lamp', price: 34.99, icon: '💡' },
+        ];
+
+        // ─── Cart State ──────────────────────────────────────────────────────────
+        let cart = [];
+
+        // ─── Rest Operator: addToCart accepts any number of items ────────────────
+        function addToCart(...items) {
+            // Spread operator: clone the current cart, then push new items
+            const updatedCart = [...cart, ...items];
+            cart = updatedCart;
+            renderCart();
+        }
+
+        // ─── Render cart & stats ─────────────────────────────────────────────────
+        function renderCart() {
+            const cartList = document.getElementById('cart-list');
+
+            if (cart.length === 0) {
+                cartList.innerHTML = '<li class="empty-state">Cart is empty. Add some items!</li>';
+                document.getElementById('first-item-box').textContent = 'No items yet.';
+                document.getElementById('first-item-box').classList.add('empty-state');
+                document.getElementById('total-count').textContent = 0;
+                document.getElementById('total-price').textContent = '$0';
+                document.getElementById('remaining-count').textContent = 0;
+                return;
+            }
+
+            // Array Destructuring: extract first item and remaining items
+            const [firstItem, ...remainingItems] = cart;
+
+            // Build cart list HTML
+            cartList.innerHTML = cart
+                .map(item => `
+          <li>
+            <span class="item-icon">${item.icon}</span>
+            <span>${item.name}</span>
+            <span style="margin-left:auto;color:#34d399;font-weight:600;">$${item.price.toFixed(2)}</span>
+          </li>`)
+                .join('');
+
+            // First item display (destructured)
+            const box = document.getElementById('first-item-box');
+            box.classList.remove('empty-state');
+            box.innerHTML = `
+        <strong>${firstItem.icon} ${firstItem.name}</strong>
+        — $${firstItem.price.toFixed(2)}
+        <span style="color:#64748b;font-size:0.8rem;margin-left:0.5rem;">(destructured as first item)</span>`;
+
+            // Stats
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('total-count').textContent = cart.length;
+            document.getElementById('total-price').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('remaining-count').textContent = remainingItems.length;
+        }
+
+        // ─── Render product list ─────────────────────────────────────────────────
+        function renderProducts() {
+            const container = document.getElementById('product-list');
+            container.innerHTML = products.map(p => `
+        <div class="product-item">
+          <span class="product-icon">${p.icon}</span>
+          <div class="product-info">
+            <div class="product-name">${p.name}</div>
+            <div class="product-price">$${p.price.toFixed(2)}</div>
+          </div>
+          <button class="btn-add" onclick="addToCart(${JSON.stringify(p)})">+ Add</button>
+        </div>`).join('');
+        }
+
+        // ─── Init ─────────────────────────────────────────────────────────────────
+        renderProducts();
+        renderCart();
+    </script>
+
+</body>
+
+</html>

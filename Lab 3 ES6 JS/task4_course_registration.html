@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 03 – Task 4: Course Registration System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            color: #e2e8f0;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #34d399, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: #94a3b8;
+            margin-top: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(52, 211, 153, 0.15);
+            border: 1px solid rgba(52, 211, 153, 0.4);
+            color: #34d399;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 680px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 1.6rem;
+            backdrop-filter: blur(12px);
+            animation: fadeIn 0.5s ease both;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-title .icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .icon-green {
+            background: rgba(52, 211, 153, 0.2);
+        }
+
+        .icon-blue {
+            background: rgba(96, 165, 250, 0.2);
+        }
+
+        .icon-amber {
+            background: rgba(251, 191, 36, 0.2);
+        }
+
+        /* Input */
+        .input-row {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .input-row input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            padding: 0.6rem 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-row input:focus {
+            border-color: #34d399;
+        }
+
+        .input-row input::placeholder {
+            color: #64748b;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #059669, #34d399);
+            color: #fff;
+        }
+
+        .btn-green:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 211, 153, 0.35);
+        }
+
+        /* Log */
+        .log-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            font-size: 0.82rem;
+            max-height: 180px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .log-item {
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        .log-ok {
+            color: #34d399;
+        }
+
+        .log-warn {
+            color: #fbbf24;
+        }
+
+        .log-info {
+            color: #60a5fa;
+        }
+
+        /* Courses grid */
+        .courses-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .course-chip {
+            background: rgba(52, 211, 153, 0.12);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            color: #6ee7b7;
+            padding: 0.3rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            animation: chipIn 0.3s ease both;
+        }
+
+        @keyframes chipIn {
+            from {
+                opacity: 0;
+                transform: scale(0.85);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Stats */
+        .stat-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(96, 165, 250, 0.08);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.88rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #60a5fa;
+        }
+
+        /* For-of loop output */
+        .loop-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .loop-list li {
+            background: rgba(255, 255, 255, 0.04);
+            border-left: 3px solid #34d399;
+            padding: 0.45rem 0.8rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.88rem;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .loop-idx {
+            font-size: 0.72rem;
+            color: #64748b;
+            width: 22px;
+            font-weight: 600;
+        }
+
+        .empty-note {
+            color: #475569;
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="badge">Lab 03 – Task 4</div>
+        <h1>Course Registration System</h1>
+        <p>JavaScript Set · .size · for…of · Duplicate Prevention</p>
+    </header>
+
+    <div class="main-grid">
+
+        <!-- Register a Course -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon icon-green">📚</div>
+                Register a Course
+            </div>
+            <div class="input-row">
+                <input type="text" id="courseInput" placeholder="e.g. Data Structures" />
+                <button class="btn btn-green" onclick="registerCourse()">Add</button>
+            </div>
+            <div class="log-box" id="logBox">
+                <div class="log-item log-info">ℹ️ &nbsp;System ready. Add your first course above.</div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon icon-blue">📊</div>
+                Statistics
+            </div>
+            <div class="stat-box">
+                <div>
+                    <div class="stat-label">Total Unique Courses</div>
+                    <div class="stat-label" style="margin-top:4px;font-size:0.78rem;">via Set.size</div>
+                </div>
+                <div class="stat-value" id="sizeDisplay">0</div>
+            </div>
+            <div class="stat-box"
+                style="margin-top:0.8rem; background:rgba(52,211,153,0.06); border-color:rgba(52,211,153,0.2);">
+                <div class="stat-label">Attempts Made</div>
+                <div style="font-size:2rem; font-weight:700; color:#34d399;" id="attemptsDisplay">0</div>
+            </div>
+            <div class="stat-box"
+                style="margin-top:0.8rem; background:rgba(251,191,36,0.06); border-color:rgba(251,191,36,0.2);">
+                <div class="stat-label">Duplicates Rejected</div>
+                <div style="font-size:2rem; font-weight:700; color:#fbbf24;" id="dupeDisplay">0</div>
+            </div>
+        </div>
+
+        <!-- All Registered Courses -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon icon-green">✅</div>
+                Registered Courses
+            </div>
+            <div class="courses-grid" id="coursesGrid">
+                <div class="empty-note">No courses registered yet.</div>
+            </div>
+        </div>
+
+        <!-- for…of Loop Output -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon icon-blue">🔄</div>
+                for…of Loop Output
+            </div>
+            <ul class="loop-list" id="loopList">
+                <li><span class="loop-idx">—</span>Add courses to see the loop output.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        // ─── Set to store unique courses ─────────────────────────────────────────
+        const registeredCourses = new Set();
+        let attempts = 0;
+        let duplicates = 0;
+
+        // ─── Pre-populate with some courses ──────────────────────────────────────
+        const initialCourses = [
+            'Web Development',
+            'Data Structures',
+            'Calculus',
+            'Machine Learning',
+            'Data Structures'   // intentional duplicate to demonstrate Set behaviour
+        ];
+
+        initialCourses.forEach(course => {
+            addCourse(course, /* silent */ true);
+        });
+        renderAll();
+
+        // ─── Register course handler ──────────────────────────────────────────────
+        function registerCourse() {
+            const input = document.getElementById('courseInput');
+            const course = input.value.trim();
+            if (!course) return;
+
+            addCourse(course);
+            input.value = '';
+            input.focus();
+        }
+
+        function addCourse(name, silent = false) {
+            attempts++;
+            const sizeBefore = registeredCourses.size;
+            registeredCourses.add(name);          // Set ignores duplicates automatically
+            const added = registeredCourses.size > sizeBefore;
+
+            if (!added) duplicates++;
+
+            if (!silent) {
+                log(
+                    added
+                        ? `✅ "${name}" registered successfully.`
+                        : `⚠️  Duplicate! "${name}" is already registered.`,
+                    added ? 'log-ok' : 'log-warn'
+                );
+            }
+
+            renderAll();
+        }
+
+        // ─── Render helpers ───────────────────────────────────────────────────────
+        function renderAll() {
+            // Stats
+            document.getElementById('sizeDisplay').textContent = registeredCourses.size;
+            document.getElementById('attemptsDisplay').textContent = attempts;
+            document.getElementById('dupeDisplay').textContent = duplicates;
+
+            // Chips
+            const grid = document.getElementById('coursesGrid');
+            if (registeredCourses.size === 0) {
+                grid.innerHTML = '<div class="empty-note">No courses registered yet.</div>';
+            } else {
+                grid.innerHTML = [...registeredCourses]
+                    .map(c => `<span class="course-chip">📖 ${c}</span>`)
+                    .join('');
+            }
+
+            // for…of loop display
+            const listEl = document.getElementById('loopList');
+            if (registeredCourses.size === 0) {
+                listEl.innerHTML = '<li><span class="loop-idx">—</span>Add courses to see the loop output.</li>';
+                return;
+            }
+
+            let idx = 1;
+            let items = '';
+            for (const course of registeredCourses) {          // for…of on Set
+                items += `<li><span class="loop-idx">${idx++}</span>${course}</li>`;
+            }
+            listEl.innerHTML = items;
+        }
+
+        function log(msg, cls = 'log-info') {
+            const box = document.getElementById('logBox');
+            const item = document.createElement('div');
+            item.className = `log-item ${cls}`;
+            item.textContent = msg;
+            box.appendChild(item);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // Allow Enter key
+        document.getElementById('courseInput')
+            .addEventListener('keydown', e => { if (e.key === 'Enter') registerCourse(); });
+    </script>
+
+</body>
+
+</html>

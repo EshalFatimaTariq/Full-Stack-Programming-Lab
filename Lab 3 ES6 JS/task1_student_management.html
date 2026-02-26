@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 03 – Task 1: Student Management System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            color: #e2e8f0;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #a78bfa, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: #94a3b8;
+            margin-top: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(167, 139, 250, 0.15);
+            border: 1px solid rgba(167, 139, 250, 0.4);
+            color: #a78bfa;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        #students-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .student-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 1.6rem;
+            backdrop-filter: blur(12px);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            animation: fadeIn 0.5s ease both;
+        }
+
+        .student-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .student-card .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .avatar-purple {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        .avatar-blue {
+            background: linear-gradient(135deg, #2563eb, #60a5fa);
+        }
+
+        .avatar-pink {
+            background: linear-gradient(135deg, #db2777, #f472b6);
+        }
+
+        .student-name {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .student-id {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.55rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.9rem;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #e2e8f0;
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .courses-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 1rem;
+        }
+
+        .course-chip {
+            background: rgba(96, 165, 250, 0.15);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            color: #93c5fd;
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="badge">Lab 03 – Task 1</div>
+        <h1>Student Management System</h1>
+        <p>ES6 Classes · Template Literals · Dynamic innerHTML</p>
+    </header>
+
+    <div id="students-container"></div>
+
+    <script>
+        // ─── ES6 Class Definition ───────────────────────────────────────────────
+        class Student {
+            constructor(id, name, semester, courses) {
+                this.id = id;
+                this.name = name;
+                this.semester = semester;
+                this.courses = courses;   // array of course names
+            }
+
+            // Returns an HTML string for this student's card
+            toCardHTML(avatarClass, initial) {
+                // Use template literals to build the markup
+                const courseChips = this.courses
+                    .map(c => `<span class="course-chip">${c}</span>`)
+                    .join('');
+
+                return `
+          <div class="student-card">
+            <div class="card-header">
+              <div class="avatar ${avatarClass}">${initial}</div>
+              <div>
+                <div class="student-name">${this.name}</div>
+                <div class="student-id">ID: ${this.id}</div>
+              </div>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Semester</span>
+              <span class="info-value">${this.semester}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Enrolled Courses</span>
+              <span class="info-value">${this.courses.length}</span>
+            </div>
+
+            <div class="courses-list">${courseChips}</div>
+          </div>
+        `;
+            }
+        }
+
+        // ─── Student Objects ────────────────────────────────────────────────────
+        const student1 = new Student(
+            'S-001', 'Ahmed Raza', 'Semester 3',
+            ['Web Development', 'Data Structures', 'Calculus']
+        );
+
+        const student2 = new Student(
+            'S-002', 'Bilal Hassan', 'Semester 5',
+            ['Machine Learning', 'Databases', 'Software Engineering', 'Statistics']
+        );
+
+        const student3 = new Student(
+            'S-003', 'Fatima Khan', 'Semester 2',
+            ['Programming Fundamentals', 'Linear Algebra', 'Physics']
+        );
+
+        // ─── Render to DOM ──────────────────────────────────────────────────────
+        const students = [student1, student2, student3];
+
+        const avatarStyles = [
+            { cls: 'avatar-purple', initial: 'AR' },
+            { cls: 'avatar-blue', initial: 'BH' },
+            { cls: 'avatar-pink', initial: 'FK' },
+        ];
+
+        let html = '';
+        students.forEach((student, index) => {
+            const { cls, initial } = avatarStyles[index];
+            html += student.toCardHTML(cls, initial);
+        });
+
+        document.getElementById('students-container').innerHTML = html;
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 03 – Task 5: Product Catalog</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            color: #e2e8f0;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #f472b6, #fb923c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: #94a3b8;
+            margin-top: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(244, 114, 182, 0.15);
+            border: 1px solid rgba(244, 114, 182, 0.4);
+            color: #f472b6;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .layout {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Controls Bar */
+        .controls-bar {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 0.8rem;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            backdrop-filter: blur(12px);
+        }
+
+        @media (max-width: 640px) {
+            .controls-bar {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .search-wrap {
+            position: relative;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            padding: 0.65rem 1rem 0.65rem 2.4rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-wrap input:focus {
+            border-color: #f472b6;
+        }
+
+        .search-wrap input::placeholder {
+            color: #64748b;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+        }
+
+        .stat-pill {
+            background: rgba(251, 146, 60, 0.15);
+            border: 1px solid rgba(251, 146, 60, 0.3);
+            border-radius: 12px;
+            padding: 0.6rem 1.2rem;
+            text-align: center;
+        }
+
+        .stat-pill .num {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fb923c;
+        }
+
+        .stat-pill .lbl {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .btn {
+            padding: 0.65rem 1.3rem;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #be185d, #f472b6);
+            color: #fff;
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(244, 114, 182, 0.35);
+        }
+
+        .btn-delete:active {
+            transform: translateY(0);
+        }
+
+        /* Message Banner */
+        .msg-banner {
+            padding: 0.7rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .msg-ok {
+            background: rgba(52, 211, 153, 0.12);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            color: #6ee7b7;
+        }
+
+        .msg-warn {
+            background: rgba(251, 191, 36, 0.12);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fde68a;
+        }
+
+        .msg-err {
+            background: rgba(248, 113, 113, 0.12);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            color: #fca5a5;
+        }
+
+        /* Product Grid */
+        #productGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.4rem;
+            backdrop-filter: blur(12px);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s;
+            animation: fadeIn 0.4s ease both;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .product-card.highlight {
+            border-color: #f472b6;
+            box-shadow: 0 0 0 2px rgba(244, 114, 182, 0.3);
+        }
+
+        .product-emoji {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .product-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .product-id {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 2px;
+            margin-bottom: 0.8rem;
+        }
+
+        .product-badge {
+            display: inline-block;
+            background: rgba(251, 146, 60, 0.15);
+            border: 1px solid rgba(251, 146, 60, 0.3);
+            color: #fdba74;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+        }
+
+        .detail-label {
+            color: #64748b;
+        }
+
+        .detail-value {
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #34d399;
+        }
+
+        .btn-del-card {
+            margin-top: 1rem;
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 9px;
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            background: rgba(248, 113, 113, 0.1);
+            color: #fca5a5;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-del-card:hover {
+            background: rgba(248, 113, 113, 0.2);
+            border-color: rgba(248, 113, 113, 0.5);
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="badge">Lab 03 – Task 5</div>
+        <h1>Product Catalog</h1>
+        <p>JavaScript Map · Key/Value · Search · Delete · .size</p>
+    </header>
+
+    <div class="layout">
+
+        <div class="controls-bar">
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search by Product ID (e.g. P001)…" />
+            </div>
+            <div class="stat-pill">
+                <div class="num" id="totalDisplay">0</div>
+                <div class="lbl">Products in Map</div>
+            </div>
+            <button class="btn btn-delete" onclick="deleteBySearch()">🗑 Delete by ID</button>
+        </div>
+
+        <div class="msg-banner" id="msgBanner"></div>
+
+        <div id="productGrid">
+            <!-- Rendered by JS -->
+        </div>
+
+    </div>
+
+    <script>
+        // ─── Product Map: Key = Product ID → Value = product object ────────────
+        const productCatalog = new Map();
+
+        // ─── Seed with 5 products ────────────────────────────────────────────────
+        const seedProducts = [
+            { id: 'P001', name: 'Wireless Headphones', category: 'Electronics', price: 79.99, stock: 42, emoji: '🎧' },
+            { id: 'P002', name: 'Mechanical Keyboard', category: 'Electronics', price: 129.00, stock: 17, emoji: '⌨️' },
+            { id: 'P003', name: 'Running Sneakers', category: 'Footwear', price: 95.50, stock: 30, emoji: '👟' },
+            { id: 'P004', name: 'Coffee Maker Pro', category: 'Appliances', price: 59.99, stock: 8, emoji: '☕' },
+            { id: 'P005', name: 'Smart Water Bottle', category: 'Lifestyle', price: 34.95, stock: 55, emoji: '💧' },
+        ];
+
+        seedProducts.forEach(p => productCatalog.set(p.id, p));
+
+        renderGrid();
+
+        // ─── Render ──────────────────────────────────────────────────────────────
+        function renderGrid(highlightId = null) {
+            const grid = document.getElementById('productGrid');
+            document.getElementById('totalDisplay').textContent = productCatalog.size;  // .size
+
+            if (productCatalog.size === 0) {
+                grid.innerHTML = '<div class="no-results">No products in catalog.</div>';
+                return;
+            }
+
+            let html = '';
+            for (const [id, p] of productCatalog) {          // iterating Map
+                const hl = id === highlightId ? ' highlight' : '';
+                html += `
+          <div class="product-card${hl}" id="card-${id}">
+            <div class="product-emoji">${p.emoji}</div>
+            <div class="product-name">${p.name}</div>
+            <div class="product-id">ID: ${id}</div>
+            <div class="product-badge">${p.category}</div>
+            <div class="product-details">
+              <div class="detail-row">
+                <span class="detail-label">Price</span>
+                <span class="detail-value price">$${p.price.toFixed(2)}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">In Stock</span>
+                <span class="detail-value">${p.stock} units</span>
+              </div>
+            </div>
+            <button class="btn-del-card" onclick="deleteProduct('${id}')">🗑 Remove</button>
+          </div>`;
+            }
+            grid.innerHTML = html;
+        }
+
+        // ─── Search by ID ────────────────────────────────────────────────────────
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const query = this.value.trim().toUpperCase();
+            if (!query) { renderGrid(); clearMsg(); return; }
+
+            if (productCatalog.has(query)) {                  // Map.has()
+                const p = productCatalog.get(query);            // Map.get()
+                showMsg(`✅ Found: "${p.name}" (${query}) — $${p.price.toFixed(2)}`, 'msg-ok');
+                renderGrid(query);
+            } else {
+                showMsg(`❌ No product found with ID "${query}".`, 'msg-err');
+                renderGrid();
+            }
+        });
+
+        // ─── Delete by search field ID ────────────────────────────────────────────
+        function deleteBySearch() {
+            const query = document.getElementById('searchInput').value.trim().toUpperCase();
+            if (!query) { showMsg('⚠️  Enter a Product ID to delete.', 'msg-warn'); return; }
+            deleteProduct(query);
+            document.getElementById('searchInput').value = '';
+        }
+
+        // ─── Delete product from Map ──────────────────────────────────────────────
+        function deleteProduct(id) {
+            if (productCatalog.has(id)) {
+                const name = productCatalog.get(id).name;
+                productCatalog.delete(id);                      // Map.delete()
+                showMsg(`🗑 "${name}" (${id}) deleted. ${productCatalog.size} product(s) remaining.`, 'msg-warn');
+                renderGrid();
+            } else {
+                showMsg(`❌ Product ID "${id}" not found in catalog.`, 'msg-err');
+            }
+        }
+
+        // ─── UI helpers ──────────────────────────────────────────────────────────
+        function showMsg(text, cls) {
+            const el = document.getElementById('msgBanner');
+            el.className = `msg-banner ${cls}`;
+            el.textContent = text;
+            el.style.display = 'block';
+            clearTimeout(el._t);
+            el._t = setTimeout(() => { el.style.display = 'none'; }, 4000);
+        }
+
+        function clearMsg() {
+            const el = document.getElementById('msgBanner');
+            el.style.display = 'none';
+        }
+    </script>
+
+</body>
+
+</html>

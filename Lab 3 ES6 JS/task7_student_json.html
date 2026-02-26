@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 03 – Task 7: Student Data Using JSON</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            color: #e2e8f0;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #fb923c, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: #94a3b8;
+            margin-top: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(251, 146, 60, 0.15);
+            border: 1px solid rgba(251, 146, 60, 0.4);
+            color: #fb923c;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .page-layout {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        /* Steps bar */
+        .steps-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            justify-content: center;
+        }
+
+        .step-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            padding: 0.35rem 0.9rem;
+            font-size: 0.78rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .step-pill .num {
+            background: rgba(251, 146, 60, 0.2);
+            color: #fb923c;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        /* Panel */
+        .panel {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            animation: fadeIn 0.5s ease both;
+        }
+
+        .panel-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .ib-orange {
+            background: rgba(251, 146, 60, 0.2);
+        }
+
+        .ib-blue {
+            background: rgba(96, 165, 250, 0.2);
+        }
+
+        .ib-green {
+            background: rgba(52, 211, 153, 0.2);
+        }
+
+        .ib-purple {
+            background: rgba(167, 139, 250, 0.2);
+        }
+
+        /* JSON viewer */
+        .json-block {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.78rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            max-height: 260px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .jk {
+            color: #93c5fd;
+        }
+
+        /* key */
+        .jv {
+            color: #6ee7b7;
+        }
+
+        /* string value */
+        .jn {
+            color: #fbbf24;
+        }
+
+        /* number */
+        .jb {
+            color: #f472b6;
+        }
+
+        /* bracket / punctuation */
+
+        /* Two-column for JSON panels */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 680px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Destructuring display */
+        .dest-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .dest-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            padding: 0.9rem;
+        }
+
+        .dest-label {
+            font-size: 0.72rem;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dest-value {
+            font-size: 0.95rem;
+            color: #f1f5f9;
+            font-weight: 500;
+            margin-top: 0.3rem;
+        }
+
+        /* Student cards */
+        .student-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .s-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 16px;
+            padding: 1.3rem;
+            transition: transform 0.25s, box-shadow 0.25s;
+            animation: fadeIn 0.4s ease both;
+        }
+
+        .s-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .av1 {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        .av2 {
+            background: linear-gradient(135deg, #0369a1, #38bdf8);
+        }
+
+        .av3 {
+            background: linear-gradient(135deg, #be185d, #f472b6);
+        }
+
+        .s-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .s-sub {
+            font-size: 0.78rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.45rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.85rem;
+        }
+
+        .info-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .inf-label {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .inf-value {
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .course-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-top: 0.8rem;
+        }
+
+        .c-chip {
+            background: rgba(251, 146, 60, 0.12);
+            border: 1px solid rgba(251, 146, 60, 0.25);
+            color: #fdba74;
+            padding: 0.2rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+        }
+
+        /* forEach loop output */
+        .foreach-out {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .fo-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #fb923c;
+            padding: 0.5rem 0.8rem;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.83rem;
+            color: #cbd5e1;
+        }
+
+        .fo-item strong {
+            color: #fb923c;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="badge">Lab 03 – Task 7</div>
+        <h1>Student Data Using JSON</h1>
+        <p>JSON.stringify · JSON.parse · Destructuring · forEach · innerHTML</p>
+    </header>
+
+    <div class="page-layout">
+
+        <!-- Steps indicator -->
+        <div class="steps-bar">
+            <div class="step-pill">
+                <div class="num">1</div>Create Objects
+            </div>
+            <div class="step-pill">
+                <div class="num">2</div>JSON.stringify()
+            </div>
+            <div class="step-pill">
+                <div class="num">3</div>JSON.parse()
+            </div>
+            <div class="step-pill">
+                <div class="num">4</div>Destructuring
+            </div>
+            <div class="step-pill">
+                <div class="num">5</div>innerHTML &amp; forEach
+            </div>
+        </div>
+
+        <!-- Steps 1–3: stringify & parse side by side -->
+        <div class="two-col">
+            <div class="panel">
+                <div class="panel-title">
+                    <div class="icon-box ib-orange">📦</div> Step 2 — JSON.stringify()
+                </div>
+                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.8rem;">
+                    Raw JSON string produced by <code style="color:#fb923c">JSON.stringify(students, null, 2)</code>
+                </p>
+                <div class="json-block" id="stringifyOut"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">
+                    <div class="icon-box ib-green">🔄</div> Step 3 — JSON.parse()
+                </div>
+                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.8rem;">
+                    Object restored via <code style="color:#34d399">JSON.parse()</code> — confirming round-trip
+                    fidelity.
+                </p>
+                <div class="json-block" id="parseOut"></div>
+            </div>
+        </div>
+
+        <!-- Step 4: Destructuring -->
+        <div class="panel">
+            <div class="panel-title">
+                <div class="icon-box ib-purple">🔍</div> Step 4 — Destructuring
+            </div>
+            <p style="font-size:0.8rem; color:#64748b; margin-bottom:1rem;">
+                Using <code style="color:#a78bfa">const { name, age, semester, courses } = student</code> to extract
+                properties.
+            </p>
+            <div class="dest-grid" id="destructOut"></div>
+        </div>
+
+        <!-- Step 5a: Student Cards via innerHTML -->
+        <div class="panel">
+            <div class="panel-title">
+                <div class="icon-box ib-orange">🎓</div> Step 5 — Student Cards (innerHTML)
+            </div>
+            <div class="student-cards" id="studentCards"></div>
+        </div>
+
+        <!-- Step 5b: forEach loop output -->
+        <div class="panel">
+            <div class="panel-title">
+                <div class="icon-box ib-blue">🔁</div> Step 5 — forEach Loop Output
+            </div>
+            <div class="foreach-out" id="foreachOut"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // ─── Step 1: Create 3 student objects ────────────────────────────────────
+        const students = [
+            {
+                name: 'Ahmed Raza',
+                age: 21,
+                semester: 'Semester 3',
+                courses: ['Web Development', 'Data Structures', 'Calculus']
+            },
+            {
+                name: 'Bilal Hassan',
+                age: 23,
+                semester: 'Semester 5',
+                courses: ['Machine Learning', 'Databases', 'Software Engineering', 'Statistics']
+            },
+            {
+                name: 'Fatima Khan',
+                age: 20,
+                semester: 'Semester 2',
+                courses: ['Programming Fundamentals', 'Linear Algebra', 'Physics']
+            }
+        ];
+
+        // ─── Step 2: JSON.stringify() ─────────────────────────────────────────────
+        const jsonString = JSON.stringify(students, null, 2);
+        document.getElementById('stringifyOut').innerHTML = syntaxHighlight(jsonString);
+
+        // ─── Step 3: JSON.parse() ────────────────────────────────────────────────
+        const parsedStudents = JSON.parse(jsonString);
+        document.getElementById('parseOut').innerHTML = syntaxHighlight(JSON.stringify(parsedStudents, null, 2));
+
+        // ─── Step 4: Destructuring ────────────────────────────────────────────────
+        // Destructure the first student as a demonstration
+        const { name, age, semester, courses } = parsedStudents[0];
+
+        const destData = [
+            { label: 'name', value: name },
+            { label: 'age', value: `${age} yrs` },
+            { label: 'semester', value: semester },
+            { label: 'courses', value: `${courses.length} enrolled` },
+        ];
+
+        document.getElementById('destructOut').innerHTML = destData
+            .map(d => `
+        <div class="dest-card">
+          <div class="dest-label">${d.label}</div>
+          <div class="dest-value">${d.value}</div>
+        </div>`)
+            .join('');
+
+        // ─── Step 5a: Display all student info via innerHTML ─────────────────────
+        const avatarData = [
+            { cls: 'av1', initials: 'AR' },
+            { cls: 'av2', initials: 'BH' },
+            { cls: 'av3', initials: 'FK' },
+        ];
+
+        let cardsHtml = '';
+
+        parsedStudents.forEach((student, index) => {         // forEach loop
+            const { name, age, semester, courses } = student;  // destructuring inside loop
+            const av = avatarData[index];
+            const courseChips = courses.map(c => `<span class="c-chip">📖 ${c}</span>`).join('');
+
+            cardsHtml += `
+        <div class="s-card">
+          <div class="card-header">
+            <div class="avatar ${av.cls}">${av.initials}</div>
+            <div>
+              <div class="s-name">${name}</div>
+              <div class="s-sub">${semester}</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <span class="inf-label">Age</span>
+            <span class="inf-value">${age} years</span>
+          </div>
+          <div class="info-row">
+            <span class="inf-label">Semester</span>
+            <span class="inf-value">${semester}</span>
+          </div>
+          <div class="info-row">
+            <span class="inf-label">Total Courses</span>
+            <span class="inf-value">${courses.length}</span>
+          </div>
+          <div class="course-chips">${courseChips}</div>
+        </div>`;
+        });
+
+        document.getElementById('studentCards').innerHTML = cardsHtml;
+
+        // ─── Step 5b: forEach loop console-style output ───────────────────────────
+        const foreachEl = document.getElementById('foreachOut');
+        let foreachHtml = '';
+
+        parsedStudents.forEach((student, index) => {
+            const { name, age, semester, courses } = student;
+            foreachHtml += `
+        <div class="fo-item">
+          [${index}] <strong>${name}</strong> — Age: ${age} | ${semester} | Courses: ${courses.join(', ')}
+        </div>`;
+        });
+
+        foreachEl.innerHTML = foreachHtml;
+
+        // ─── Syntax highlighter for JSON ─────────────────────────────────────────
+        function syntaxHighlight(json) {
+            return json
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(
+                    /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+                    match => {
+                        let cls = 'jn';
+                        if (/^"/.test(match)) cls = /:$/.test(match) ? 'jk' : 'jv';
+                        return `<span class="${cls}">${match}</span>`;
+                    }
+                );
+        }
+    </script>
+
+</body>
+
+</html>

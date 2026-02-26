@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 03 – Task 3: Async Data Loader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a0533, #140a2e, #0d1b3e);
+            min-height: 100vh;
+            color: #e2e8f0;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            color: #fbbf24;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #fbbf24, #f87171);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: #94a3b8;
+            margin-top: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        /* Control panel */
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .toggle-row label {
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        input[type="checkbox"] {
+            accent-color: #f87171;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .btn-load {
+            background: linear-gradient(135deg, #7c2d12, #fbbf24);
+            color: white;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-load:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+
+        .btn-load:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Status box */
+        #status-box {
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+            border-radius: 14px;
+            padding: 1rem 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .status-idle {
+            background: rgba(100, 116, 139, 0.15);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            color: #94a3b8;
+        }
+
+        .status-loading {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+        }
+
+        .status-success {
+            background: rgba(52, 211, 153, 0.1);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            color: #34d399;
+        }
+
+        .status-error {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            color: #f87171;
+        }
+
+        /* Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(251, 191, 36, 0.3);
+            border-top-color: #fbbf24;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Timer bar */
+        .timer-bar-bg {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        #timer-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #fbbf24, #f87171);
+            border-radius: 999px;
+            transition: width 0.1s linear;
+        }
+
+        /* User cards */
+        #users-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .user-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.4rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            animation: slideUp 0.4s ease both;
+        }
+
+        .user-card:nth-child(2) {
+            animation-delay: 0.05s;
+        }
+
+        .user-card:nth-child(3) {
+            animation-delay: 0.10s;
+        }
+
+        .user-card:nth-child(4) {
+            animation-delay: 0.15s;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .avatar-a {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        .avatar-b {
+            background: linear-gradient(135deg, #0369a1, #38bdf8);
+        }
+
+        .avatar-c {
+            background: linear-gradient(135deg, #065f46, #34d399);
+        }
+
+        .avatar-d {
+            background: linear-gradient(135deg, #9a3412, #fbbf24);
+        }
+
+        .user-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .user-email {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 3px;
+        }
+
+        .user-role {
+            display: inline-block;
+            margin-top: 6px;
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Code section */
+        .code-section {
+            max-width: 800px;
+            margin: 2.5rem auto 0;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .code-section .code-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.7rem 1.2rem;
+            font-size: 0.8rem;
+            color: #64748b;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .code-section pre {
+            padding: 1.2rem;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            color: #cbd5e1;
+        }
+
+        .kw {
+            color: #c084fc;
+        }
+
+        /* keyword */
+        .fn {
+            color: #67e8f9;
+        }
+
+        /* function */
+        .str {
+            color: #86efac;
+        }
+
+        /* string */
+        .cm {
+            color: #475569;
+        }
+
+        /* comment */
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="badge">Lab 03 – Task 3</div>
+        <h1>Asynchronous Data Loader</h1>
+        <p>Promises · setTimeout · .then() · .catch()</p>
+    </header>
+
+    <!-- Controls -->
+    <div class="controls">
+        <div class="toggle-row">
+            <input type="checkbox" id="fail-toggle" />
+            <label for="fail-toggle">Simulate Failure (reject)</label>
+        </div>
+        <button class="btn-load" id="load-btn" onclick="startLoad()">⚡ Fetch Users</button>
+    </div>
+
+    <!-- Status -->
+    <div id="status-box" class="status-idle">
+        <span>⏳</span>
+        <span id="status-text">Click "Fetch Users" to load data from the server.</span>
+    </div>
+
+    <!-- Timer Bar -->
+    <div class="timer-bar-bg">
+        <div id="timer-bar"></div>
+    </div>
+
+    <!-- Results -->
+    <div id="users-container"></div>
+
+    <!-- Concept Code Display -->
+    <div class="code-section">
+        <div class="code-header">📄 Promise Logic (ES6)</div>
+        <pre><span class="kw">function</span> <span class="fn">fetchUsers</span>(shouldFail) {
+  <span class="kw">return new</span> <span class="fn">Promise</span>((resolve, reject) =&gt; {
+    <span class="fn">setTimeout</span>(() =&gt; {
+      <span class="kw">if</span> (shouldFail) {
+        reject(<span class="str">"Error: Failed to fetch user data."</span>);
+      } <span class="kw">else</span> {
+        resolve([...usersData]);   <span class="cm">// resolve with user array</span>
+      }
+    }, <span class="str">3000</span>);            <span class="cm">// 3-second simulated delay</span>
+  });
+}
+
+<span class="fn">fetchUsers</span>(shouldFail)
+  .<span class="fn">then</span>(users =&gt; <span class="fn">displayUsers</span>(users))
+  .<span class="fn">catch</span>(err  =&gt; <span class="fn">showError</span>(err));</pre>
+    </div>
+
+    <script>
+        // ─── Mock user data (resolved by Promise) ───────────────────────────────
+        const usersData = [
+            { id: 'U-01', name: 'Ahmed Raza', email: 'ahmed.raza@example.com', role: 'Admin', abbr: 'AR', avatarClass: 'avatar-a' },
+            { id: 'U-02', name: 'Bilal Hassan', email: 'bilal.hassan@example.com', role: 'Developer', abbr: 'BH', avatarClass: 'avatar-b' },
+            { id: 'U-03', name: 'Fatima Khan', email: 'fatima.khan@example.com', role: 'Designer', abbr: 'FK', avatarClass: 'avatar-c' },
+            { id: 'U-04', name: 'Usman Ali', email: 'usman.ali@example.com', role: 'Manager', abbr: 'UA', avatarClass: 'avatar-d' },
+        ];
+
+        const DELAY_MS = 3000;   // 3-second simulated server delay
+
+        // ─── Promise function: fetchUsers ────────────────────────────────────────
+        function fetchUsers(shouldFail) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (shouldFail) {
+                        reject('Error: Failed to fetch user data from the server.');
+                    } else {
+                        resolve([...usersData]);   // spread to return a copy
+                    }
+                }, DELAY_MS);
+            });
+        }
+
+        // ─── Timer bar animation ─────────────────────────────────────────────────
+        let timerInterval = null;
+
+        function startTimerBar() {
+            const bar = document.getElementById('timer-bar');
+            let pct = 0;
+            bar.style.width = '0%';
+            timerInterval = setInterval(() => {
+                pct += 100 / (DELAY_MS / 100);   // increment every 100ms
+                bar.style.width = Math.min(pct, 100) + '%';
+                if (pct >= 100) clearInterval(timerInterval);
+            }, 100);
+        }
+
+        function resetTimerBar() {
+            clearInterval(timerInterval);
+            document.getElementById('timer-bar').style.width = '0%';
+        }
+
+        // ─── Status helpers ──────────────────────────────────────────────────────
+        function setStatus(type, icon, msg) {
+            const box = document.getElementById('status-box');
+            box.className = 'status-' + type;
+
+            let iconEl = type === 'loading'
+                ? '<div class="spinner"></div>'
+                : `<span>${icon}</span>`;
+
+            box.innerHTML = `${iconEl}<span id="status-text">${msg}</span>`;
+        }
+
+        // ─── Display users ───────────────────────────────────────────────────────
+        function displayUsers(users) {
+            const container = document.getElementById('users-container');
+            container.innerHTML = users.map(u => `
+        <div class="user-card">
+          <div class="user-avatar ${u.avatarClass}">${u.abbr}</div>
+          <div>
+            <div class="user-name">${u.name}</div>
+            <div class="user-email">${u.email}</div>
+            <div class="user-role">${u.role}</div>
+          </div>
+        </div>`).join('');
+        }
+
+        // ─── Main load function ──────────────────────────────────────────────────
+        function startLoad() {
+            const btn = document.getElementById('load-btn');
+            const shouldFail = document.getElementById('fail-toggle').checked;
+
+            // Reset UI
+            document.getElementById('users-container').innerHTML = '';
+            btn.disabled = true;
+            btn.textContent = '⏳ Loading...';
+            startTimerBar();
+            setStatus('loading', '', 'Fetching users from server, please wait 3 seconds…');
+
+            // Call the Promise-based fetch function
+            fetchUsers(shouldFail)
+                .then(users => {
+                    // ── Resolved ──
+                    setStatus('success', '✅', `Successfully loaded ${users.length} users!`);
+                    displayUsers(users);
+                })
+                .catch(err => {
+                    // ── Rejected ──
+                    setStatus('error', '❌', err);
+                    document.getElementById('users-container').innerHTML = `
+            <div style="text-align:center;color:#f87171;padding:2rem;font-size:1rem;">
+              ⚠️ ${err}
+            </div>`;
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.textContent = '⚡ Fetch Users';
+                });
+        }
+    </script>
+
+</body>
+
+</html>
