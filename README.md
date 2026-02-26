@@ -1,19 +1,4 @@
-Full Stack Programming Lab 02: JS Interactivity
+# Full Stack Programming Lab
+This repository contains the lab tasks and practical work for the Full Stack Programming course. Each lab is organized in a separate folder (lab1, lab2, etc.), and includes the corresponding assignment, source code, and relevant instructions.
 
-**Tasks Overview**
-Dynamic Quiz: 5 questions with live scoring and reset button.
-
-Sparkle Calculator: Basic math with sound effects, input validation (no division by zero), and dynamic color changes.
-
-**Tech Stack**
-Frontend: HTML5, CSS3 (Pink Theme)
-
-Logic: JavaScript (DOM Manipulation)
-
-**Console Output**
-Calculator results are logged in the browser console (F12) with custom pink styling.
-
-**Student Info**
-Name: Eshal Fatima Tariq
-
-Collaborator: sharifali.aulecturer@gmail.com
+Instructor/ Collaborator: sharifali.aulecturer@gmail.com
