@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Drag & Drop Sortable List</title>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- jQuery UI -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#89f7fe,#66a6ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+h2 {
+    text-align: center;
+}
+
+#sortable {
+    list-style: none;
+    padding: 0;
+}
+
+#sortable li {
+    padding: 12px;
+    margin: 8px 0;
+    background: #f1f2f6;
+    border-radius: 8px;
+    cursor: grab;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+#sortable li:hover {
+    background: #dfe6e9;
+}
+
+.ui-sortable-helper {
+    background: #ffeaa7 !important;
+    transform: scale(1.05);
+}
+
+#order {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #2d3436;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Reorder Tasks</h2>
+
+    <ul id="sortable">
+        <li>Kitchen Renovation</li>
+        <li>Bathroom Remodeling</li>
+        <li>Interior Painting</li>
+        <li>Floor Installation</li>
+        <li>Roof Repair</li>
+    </ul>
+
+    <div id="order">Current Order: </div>
+</div>
+
+<script>
+$(function(){
+
+$("#sortable").sortable({
+
+    start: function(event, ui){
+        ui.item.css("background","#fab1a0");
+    },
+
+    stop: function(event, ui){
+        ui.item.css("background","#f1f2f6");
+        updateOrder();
+    }
+
+});
+
+function updateOrder(){
+    let order = [];
+
+    $("#sortable li").each(function(){
+        order.push($(this).text());
+    });
+
+    $("#order").text("Current Order: " + order.join(" | "));
+}
+
+// Initial order display
+updateOrder();
+
+});
+</script>
+
+</body>
+</html>

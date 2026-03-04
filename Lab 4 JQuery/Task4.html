@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Home Renovation Services</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #f6f9fc, #e9eff5);
+}
+
+/* Header */
+.header {
+    background: #2c3e50;
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+.header p {
+    opacity: 0.8;
+}
+
+/* Tabs */
+.tabs {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.tabs button {
+    padding: 12px 25px;
+    margin: 8px;
+    border: none;
+    border-radius: 30px;
+    background: #dcdde1;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.tabs button.active,
+.tabs button:hover {
+    background: #27ae60;
+    color: white;
+}
+
+/* Content */
+.tab-content {
+    display: none;
+    max-width: 800px;
+    margin: 30px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.tab-content h2 {
+    color: #2c3e50;
+}
+
+.tab-content p {
+    color: #555;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🏠 Dream Home Renovators</h1>
+    <p>Professional Home Renovation & Interior Experts</p>
+</div>
+
+<div class="tabs">
+    <button data-target="#kitchen">Kitchen Remodeling</button>
+    <button data-target="#bathroom">Bathroom Renovation</button>
+    <button data-target="#interior">Interior Design</button>
+    <button data-target="#painting">Painting Services</button>
+    <button data-target="#contact">Contact Us</button>
+</div>
+
+<div id="kitchen" class="tab-content">
+    <h2>🍳 Kitchen Remodeling</h2>
+    <p>We design and renovate modern kitchens with premium cabinets, countertops,
+    lighting, and smart storage solutions.</p>
+</div>
+
+<div id="bathroom" class="tab-content">
+    <h2>🚿 Bathroom Renovation</h2>
+    <p>Upgrade your bathroom with stylish tiles, vanities, walk-in showers,
+    and luxury fittings.</p>
+</div>
+
+<div id="interior" class="tab-content">
+    <h2>🛋 Interior Design</h2>
+    <p>Complete interior transformation including ceiling design, lighting,
+    flooring, and furniture layout.</p>
+</div>
+
+<div id="painting" class="tab-content">
+    <h2>🎨 Painting Services</h2>
+    <p>Premium interior and exterior painting with smooth finishing
+    and long-lasting colors.</p>
+</div>
+
+<div id="contact" class="tab-content">
+    <h2>📞 Contact Us</h2>
+    <p>Email: info@dreamhome.com<br>
+    Phone: +123 456 7890</p>
+</div>
+
+<script>
+$(function(){
+
+$(".tabs button").click(function(){
+
+    let target = $(this).data("target");
+
+    // Remove active class
+    $(".tabs button").removeClass("active");
+    $(this).addClass("active");
+
+    // Hide all and show selected
+    $(".tab-content").fadeOut(200);
+    $(target).delay(200).fadeIn(400);
+
+    // Smooth scroll
+    $("html, body").animate({
+        scrollTop: $(target).offset().top - 20
+    }, 600);
+});
+
+// Show first tab by default
+$(".tabs button:first").click();
+
+});
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+<title>Home Renovation Services</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #f6f9fc, #e9eff5);
+}
+
+/* Header */
+.header {
+    background: #2c3e50;
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+.header p {
+    opacity: 0.8;
+}
+
+/* Tabs */
+.tabs {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.tabs button {
+    padding: 12px 25px;
+    margin: 8px;
+    border: none;
+    border-radius: 30px;
+    background: #dcdde1;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.tabs button.active,
+.tabs button:hover {
+    background: #27ae60;
+    color: white;
+}
+
+/* Content */
+.tab-content {
+    display: none;
+    max-width: 800px;
+    margin: 30px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.tab-content h2 {
+    color: #2c3e50;
+}
+
+.tab-content p {
+    color: #555;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🏠 Dream Home Renovators</h1>
+    <p>Professional Home Renovation & Interior Experts</p>
+</div>
+
+<div class="tabs">
+    <button data-target="#kitchen">Kitchen Remodeling</button>
+    <button data-target="#bathroom">Bathroom Renovation</button>
+    <button data-target="#interior">Interior Design</button>
+    <button data-target="#painting">Painting Services</button>
+    <button data-target="#contact">Contact Us</button>
+</div>
+
+<div id="kitchen" class="tab-content">
+    <h2>🍳 Kitchen Remodeling</h2>
+    <p>We design and renovate modern kitchens with premium cabinets, countertops,
+    lighting, and smart storage solutions.</p>
+</div>
+
+<div id="bathroom" class="tab-content">
+    <h2>🚿 Bathroom Renovation</h2>
+    <p>Upgrade your bathroom with stylish tiles, vanities, walk-in showers,
+    and luxury fittings.</p>
+</div>
+
+<div id="interior" class="tab-content">
+    <h2>🛋 Interior Design</h2>
+    <p>Complete interior transformation including ceiling design, lighting,
+    flooring, and furniture layout.</p>
+</div>
+
+<div id="painting" class="tab-content">
+    <h2>🎨 Painting Services</h2>
+    <p>Premium interior and exterior painting with smooth finishing
+    and long-lasting colors.</p>
+</div>
+
+<div id="contact" class="tab-content">
+    <h2>📞 Contact Us</h2>
+    <p>Email: info@dreamhome.com<br>
+    Phone: +123 456 7890</p>
+</div>
+
+<script>
+$(function(){
+
+$(".tabs button").click(function(){
+
+    let target = $(this).data("target");
+
+    // Remove active class
+    $(".tabs button").removeClass("active");
+    $(this).addClass("active");
+
+    // Hide all and show selected
+    $(".tab-content").fadeOut(400);
+    $(target).delay(200).fadeIn(400);
+
+    // Smooth scroll
+    $("html, body").animate({
+        scrollTop: $(target).offset().top - 20
+    }, 600);
+});
+
+// Show first tab by default
+$(".tabs button:first").click();
+
+});
+</script>
+
+</body>
+</html>

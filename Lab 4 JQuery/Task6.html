@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>API Data Fetcher</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#74ebd5,#ACB6E5);
+    margin: 0;
+    padding: 40px;
+    text-align: center;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+#posts {
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    text-align: left;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    margin: 0 0 10px;
+    color: #34495e;
+}
+
+.card p {
+    color: #555;
+}
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    background: #2c3e50;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #27ae60;
+}
+
+#loading {
+    display: none;
+    font-weight: bold;
+    color: #2c3e50;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Blog Posts</h1>
+
+<div id="posts"></div>
+
+<p id="loading">Loading data...</p>
+
+<button id="loadMore">Load More</button>
+
+<script>
+$(function(){
+
+let start = 0;
+let limit = 5;
+
+function fetchPosts(){
+
+    $("#loading").fadeIn();
+
+    $.ajax({
+        url: "https://jsonplaceholder.typicode.com/posts",
+        method: "GET",
+        success: function(data){
+
+            let slicedData = data.slice(start, start + limit);
+
+            $.each(slicedData, function(index, post){
+
+                $("#posts").append(
+                    `<div class="card">
+                        <h3>${post.title}</h3>
+                        <p>${post.body}</p>
+                    </div>`
+                );
+            });
+
+            start += limit;
+            $("#loading").fadeOut();
+        },
+        error: function(){
+            alert("Error fetching data!");
+            $("#loading").fadeOut();
+        }
+    });
+}
+
+// Initial Load
+fetchPosts();
+
+// Load More Button
+$("#loadMore").click(function(){
+    fetchPosts();
+});
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Image Gallery</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+body {
+    font-family: 'Segoe UI';
+    background: linear-gradient(120deg,#89f7fe,#66a6ff);
+    text-align: center;
+    padding: 50px;
+}
+
+.gallery {
+    background: rgba(255,255,255,0.2);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    width: 450px;
+    margin: auto;
+}
+
+img {
+    width: 100%;
+    border-radius: 10px;
+    display: none;
+}
+
+button {
+    margin: 10px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    background: #333;
+    color: white;
+    cursor: pointer;
+}
+
+#caption {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #222;
+}
+</style>
+</head>
+
+<body>
+
+<div class="gallery">
+    <img src="https://picsum.photos/id/1015/400/250" alt="Beautiful Mountains">
+    <img src="https://picsum.photos/id/1016/400/250" alt="Green Forest">
+    <img src="https://picsum.photos/id/1025/400/250" alt="Cute Dog">
+
+    <p id="caption"></p>
+    <button id="prev">⬅ Prev</button>
+    <button id="next">Next ➡</button>
+</div>
+
+<script>
+$(function(){
+let images = $("img");
+let index = 0;
+
+function showImage(i){
+    images.fadeOut(800);
+    images.eq(i).fadeIn(800);
+    $("#caption").text(images.eq(i).attr("alt"));
+}
+
+showImage(index);
+
+$("#next").click(function(){
+    index = (index+1)%images.length;
+    showImage(index);
+});
+
+$("#prev").click(function(){
+    index = (index-1+images.length)%images.length;
+    showImage(index);
+});
+});
+</script>
+
+</body>
+</html>

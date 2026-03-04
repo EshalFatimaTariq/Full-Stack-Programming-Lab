@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chained Style Editor</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.editor-box {
+    background: white;
+    padding: 30px;
+    width: 500px;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+#textBlock {
+    padding: 20px;
+    border-radius: 10px;
+    background: #f1f2f6;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.controls button {
+    padding: 8px 14px;
+    margin: 5px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #dcdde1;
+    transition: 0.3s;
+}
+
+.controls button:hover {
+    background: #667eea;
+    color: white;
+}
+
+.active {
+    background: #667eea !important;
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="editor-box">
+    <h2>Style Editor</h2>
+
+    <div id="textBlock">
+        This is a sample text. Use the buttons below to style me!
+    </div>
+
+    <div class="controls">
+        <button id="small">Small</button>
+        <button id="medium">Medium</button>
+        <button id="large">Large</button>
+        <br>
+        <button id="red">Red</button>
+        <button id="blue">Blue</button>
+        <button id="green">Green</button>
+        <br>
+        <button id="bgYellow">Yellow BG</button>
+        <button id="bgLight">Light BG</button>
+        <br>
+        <button id="bold">Bold</button>
+        <button id="italic">Italic</button>
+        <button id="reset">Reset</button>
+    </div>
+</div>
+
+<script>
+$(function(){
+
+// Font Size (Chaining Example)
+$("#small").click(function(){
+    $("#textBlock").css("font-size","14px")
+                   .css("transition","0.3s");
+});
+
+$("#medium").click(function(){
+    $("#textBlock").css("font-size","18px")
+                   .css("transition","0.3s");
+});
+
+$("#large").click(function(){
+    $("#textBlock").css("font-size","24px")
+                   .css("transition","0.3s");
+});
+
+// Text Colors (Chaining)
+$("#red").click(function(){
+    $("#textBlock").css("color","red")
+                   .css("font-weight","normal");
+});
+
+$("#blue").click(function(){
+    $("#textBlock").css("color","blue");
+});
+
+$("#green").click(function(){
+    $("#textBlock").css("color","green");
+});
+
+// Background
+$("#bgYellow").click(function(){
+    $("#textBlock").css("background","#ffeaa7");
+});
+
+$("#bgLight").click(function(){
+    $("#textBlock").css("background","#f1f2f6");
+});
+
+// Toggle Bold & Italic
+$("#bold").click(function(){
+    $("#textBlock").css("font-weight",
+        $("#textBlock").css("font-weight")=="700" ? "normal" : "bold"
+    );
+});
+
+$("#italic").click(function(){
+    $("#textBlock").css("font-style",
+        $("#textBlock").css("font-style")=="italic" ? "normal" : "italic"
+    );
+});
+
+// Reset All Styles (Multiple Chaining)
+$("#reset").click(function(){
+    $("#textBlock")
+        .css("font-size","16px")
+        .css("color","black")
+        .css("background","#f1f2f6")
+        .css("font-weight","normal")
+        .css("font-style","normal");
+});
+
+});
+</script>
+
+</body>
+</html>
