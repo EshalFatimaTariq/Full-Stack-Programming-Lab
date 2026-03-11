@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotSpring Portable Spas - About Us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'hot-red': '#cc0000',
+                        'hot-darkred': '#aa0000',
+                        'hot-footer': '#021e35',
+                        'hot-footer-text': '#7289a0',
+                        'hot-border': '#e5e5e5',
+                    },
+                    fontFamily: {
+                        sans: ['Arial', 'Helvetica', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .error-message { color: #fe8c8c; font-size: 0.8rem; margin-top: 5px; display: none; }
+        .border-error { border-color: #fe8c8c !important; }
+        
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cc0000; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #aa0000; }
+    </style>
+</head>
+<body class="bg-[#f0f2f5] min-h-screen text-gray-800 flex flex-col pt-0">
+    
+    <!-- Top Bar -->
+    <div class="bg-gray-100 text-xs py-2 border-b border-gray-200">
+        <div class="container xl:w-[1100px] mx-auto px-4 flex justify-between items-center">
+            <div>
+                <span class="text-gray-500">Call for Customer support:</span> <span class="text-hot-red font-bold ml-1">020 38085565</span>
+            </div>
+            <div class="flex space-x-4 text-gray-500">
+                <a href="#" class="hover:text-hot-red">My Account</a>
+                <a href="#" class="hover:text-hot-red">Wishlist</a>
+                <a href="#" class="hover:text-hot-red">To Checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Logo & Cart -->
+    <div class="bg-white py-6">
+        <div class="container xl:w-[1100px] mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <!-- Logo -->
+                <a href="#" class="flex flex-col">
+                    <h1 class="text-3xl font-black tracking-tight" style="color: #333; margin-bottom: -5px;">HOTSPRING</h1>
+                    <span class="text-hot-red font-bold text-sm tracking-wide ml-1">Portable Spas</span>
+                </a>
+            </div>
+            <div class="border border-gray-200 p-2 flex items-center justify-between w-48 text-sm cursor-pointer hover:border-gray-300">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-cart-shopping text-hot-red mr-2"></i>
+                    <span class="text-gray-700">My Cart: <span class="font-bold">0 item(s)</span></span>
+                </div>
+                <i class="fa-solid fa-caret-down text-gray-400"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="bg-hot-red text-white shadow-md">
+        <div class="container xl:w-[1100px] mx-auto px-4 flex justify-between items-center h-12">
+            <ul class="flex font-bold text-sm tracking-wide h-full items-center uppercase">
+                <li class="h-full flex items-center"><a href="#" class="px-5 hover:text-gray-200 hover:bg-hot-darkred h-full flex items-center transition">Category</a></li>
+                <li class="h-full flex items-center"><span class="text-hot-darkred">|</span></li>
+                <li class="h-full flex items-center"><a href="#" class="px-5 hover:text-gray-200 hover:bg-hot-darkred h-full flex items-center transition">Brand</a></li>
+                <li class="h-full flex items-center"><span class="text-hot-darkred">|</span></li>
+                <li class="h-full flex items-center"><a href="#" class="px-5 hover:text-gray-200 hover:bg-hot-darkred h-full flex items-center transition">Info</a></li>
+            </ul>
+            <div class="flex items-center h-8 w-64">
+                <input type="text" class="h-full w-full px-3 text-sm text-gray-700 focus:outline-none" placeholder="Search...">
+                <button class="bg-[#333] hover:bg-black text-white px-4 h-full text-xs font-bold transition">SEARCH</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Area Background -->
+    <div class="bg-white flex-grow mb-10 pb-16">
+        <!-- Breadcrumbs -->
+        <div class="container xl:w-[1100px] mx-auto px-4 py-4 text-xs text-hot-red">
+            <a href="#" class="hover:underline">Home</a> <span class="text-gray-400 mx-1">></span> <span class="text-gray-600">About Us</span>
+        </div>
+
+        <div class="container xl:w-[1100px] mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">About Us</h2>
+
+            <!-- Welcome to the Company Section -->
+            <div class="bg-[#f2f2f2] p-6 mb-10 fade-in">
+                <h3 class="font-bold text-gray-800 mb-4 pb-2 border-b border-gray-300">Welcome to the Company</h3>
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="md:w-2/3 text-xs text-gray-600 leading-relaxed space-y-4">
+                        <p>
+                            This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio. Sed non mauris vitae erat consequat auctor eu in elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris in erat justo. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.
+                        </p>
+                        <p>
+                            This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio. Sed non mauris vitae erat consequat auctor eu in elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris in erat justo. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.
+                        </p>
+                    </div>
+                    <div class="md:w-1/3">
+                        <img src="extracted_assets/showroom.jpg" alt="Company Showcase" class="w-full h-auto border border-gray-300 shadow-sm rounded-sm">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Our Company members Section -->
+            <div class="mb-12 fade-in delay-1">
+                <h3 class="font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">Our Company members</h3>
+                <p class="text-xs text-gray-600 mb-6 leading-relaxed">
+                    This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio.
+                </p>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Member 1 -->
+                    <div class="flex flex-col items-center bg-white p-3 border border-gray-100 hover-lift text-center shadow-sm">
+                        <div class="w-full bg-[#e6e6e6] mb-3 aspect-square flex items-center justify-center overflow-hidden">
+                            <!-- Placeholder image representing jennifer lawrence -->
+                            <img src="extracted_assets/team1.jpg" alt="Jennifer Lawrence" class="w-full h-full object-cover">
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-sm">Jennifer lawrence</h4>
+                        <p class="text-xs text-gray-500 mb-2 italic">Business Consultant</p>
+                        <p class="text-[10px] text-gray-400 leading-tight">This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor.</p>
+                    </div>
+                    <!-- Member 2 -->
+                    <div class="flex flex-col items-center bg-white p-3 border border-gray-100 hover-lift text-center shadow-sm">
+                        <div class="w-full bg-[#e6e6e6] mb-3 aspect-square flex items-center justify-center overflow-hidden">
+                            <img src="extracted_assets/team1.jpg" alt="Jennifer Lawrence" class="w-full h-full object-cover">
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-sm">Jennifer lawrence</h4>
+                        <p class="text-xs text-gray-500 mb-2 italic">Business Consultant</p>
+                        <p class="text-[10px] text-gray-400 leading-tight">This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor.</p>
+                    </div>
+                    <!-- Member 3 -->
+                    <div class="flex flex-col items-center bg-white p-3 border border-gray-100 hover-lift text-center shadow-sm">
+                        <div class="w-full bg-[#e6e6e6] mb-3 aspect-square flex items-center justify-center overflow-hidden">
+                            <img src="extracted_assets/team1.jpg" alt="Jennifer Lawrence" class="w-full h-full object-cover">
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-sm">Jennifer lawrence</h4>
+                        <p class="text-xs text-gray-500 mb-2 italic">Business Consultant</p>
+                        <p class="text-[10px] text-gray-400 leading-tight">This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor.</p>
+                    </div>
+                    <!-- Member 4 -->
+                    <div class="flex flex-col items-center bg-white p-3 border border-gray-100 hover-lift text-center shadow-sm">
+                        <div class="w-full bg-[#e6e6e6] mb-3 aspect-square flex items-center justify-center overflow-hidden">
+                            <img src="extracted_assets/team1.jpg" alt="Jennifer Lawrence" class="w-full h-full object-cover">
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-sm">Jennifer lawrence</h4>
+                        <p class="text-xs text-gray-500 mb-2 italic">Business Consultant</p>
+                        <p class="text-[10px] text-gray-400 leading-tight">This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BRANDS LOGOS -->
+            <div class="border border-gray-200 p-6 flex flex-wrap justify-between items-center bg-white fade-in delay-2 mt-8 shadow-sm">
+                <div class="flex items-center">
+                    <div class="bg-cyan-400 text-white font-black text-xl px-2 py-1 transform -skew-x-12 mr-2">SAVE</div>
+                    <div class="bg-cyan-400 text-white font-black text-2xl px-2 py-1 transform -skew-x-12">$1,000'S</div>
+                </div>
+                <img src="extracted_assets/oceanic.jpg" alt="OceanicSpa" class="h-10 opacity-70 hover:opacity-100 transition">
+                <img src="extracted_assets/caldera.jpg" alt="CalderaSpas" class="h-10 opacity-70 hover:opacity-100 transition">
+                <img src="extracted_assets/island.jpg" alt="IslandSpas" class="h-10 opacity-70 hover:opacity-100 transition">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-hot-footer text-hot-footer-text text-xs py-10 mt-auto border-t-4 border-hot-red">
+        <div class="container xl:w-[1100px] mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Contact Us -->
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase">Contact Us</h4>
+                <ul class="space-y-2">
+                    <li>yoursitename.com</li>
+                    <li class="text-white font-bold text-sm tracking-wide">CALL 24/7: <span class="text-lg">888 - 201 - 8899</span></li>
+                    <li class="mt-2">Your Address:</li>
+                    <li>Street</li>
+                    <li>State & Zip Code</li>
+                    <li>City & Country</li>
+                    <li>Email: <a href="mailto:service@yoursitename.com" class="text-white hover:text-hot-red">service@yoursitename.com</a></li>
+                </ul>
+                <!-- Social Icons -->
+                <div class="flex space-x-2 mt-4">
+                    <a href="#" class="w-6 h-6 rounded-full bg-[#1da1f2] text-white flex items-center justify-center hover:bg-opacity-80 transition"><i class="fa-brands fa-twitter text-[10px]"></i></a>
+                    <a href="#" class="w-6 h-6 rounded-full bg-[#3b5998] text-white flex items-center justify-center hover:bg-opacity-80 transition"><i class="fa-brands fa-facebook-f text-[10px]"></i></a>
+                    <a href="#" class="w-6 h-6 rounded-full bg-[#0077b5] text-white flex items-center justify-center hover:bg-opacity-80 transition"><i class="fa-brands fa-linkedin-in text-[10px]"></i></a>
+                    <a href="#" class="w-6 h-6 rounded-full bg-[#db4437] text-white flex items-center justify-center hover:bg-opacity-80 transition"><i class="fa-brands fa-google-plus-g text-[10px]"></i></a>
+                    <a href="#" class="w-6 h-6 rounded-full bg-[#c4302b] text-white flex items-center justify-center hover:bg-opacity-80 transition"><i class="fa-brands fa-youtube text-[10px]"></i></a>
+                    <a href="#" class="w-6 h-6 rounded-full bg-[#bd081c] text-white flex items-center justify-center hover:bg-opacity-80 transition"><i class="fa-brands fa-pinterest-p text-[10px]"></i></a>
+                </div>
+            </div>
+
+            <!-- Information -->
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase">Information</h4>
+                <ul class="space-y-1">
+                    <li class="border-b border-[#0f304e] py-1"><a href="#" class="hover:text-white transition">About Us</a></li>
+                    <li class="border-b border-[#0f304e] py-1"><a href="#" class="hover:text-white transition">Customer Service</a></li>
+                    <li class="border-b border-[#0f304e] py-1"><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                    <li class="border-b border-[#0f304e] py-1"><a href="#" class="hover:text-white transition">Site Map</a></li>
+                    <li class="border-b border-[#0f304e] py-1"><a href="#" class="hover:text-white transition">Search Terms</a></li>
+                    <li class="border-b border-[#0f304e] py-1"><a href="#" class="hover:text-white transition">Contact Us</a></li>
+                    <li class="border-b border-[#0f304e] py-1"><a href="#" class="hover:text-white transition">About Us</a></li>
+                </ul>
+            </div>
+
+            <!-- My Account -->
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase">My Account</h4>
+                <ul class="space-y-1">
+                    <li class="border-b border-[#0f304e] py-1"><a href="#" class="hover:text-white transition">Sign In</a></li>
+                    <li class="border-b border-[#0f304e] py-1"><a href="#" class="hover:text-white transition">View Cart</a></li>
+                    <li class="border-b border-[#0f304e] py-1"><a href="#" class="hover:text-white transition">My Wishlist</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase">Signup For A News Leter</h4>
+                <p class="mb-2">SIGN UP FOR OUR NEWSLETTER</p>
+                <form id="newsletter-form" class="mt-2" novalidate>
+                    <div class="relative">
+                        <input type="email" id="email-input" class="w-full bg-white text-gray-800 px-3 py-2 outline-none text-xs" placeholder="Email Address...">
+                        <button type="submit" class="absolute right-0 top-0 h-full bg-[#354f65] text-white px-3 hover:bg-hot-red transition">
+                            <i class="fa-solid fa-play"></i>
+                        </button>
+                    </div>
+                    <div id="email-error" class="error-message">Please enter a valid email address.</div>
+                    <div id="email-success" class="text-green-400 text-[10px] mt-1 hidden">Subscribed successfully!</div>
+                </form>
+
+                <h5 class="text-white text-[10px] font-bold mt-6 mb-2 uppercase">Payment Solutions</h5>
+                <div class="flex space-x-1">
+                    <img src="https://placehold.co/30x20/ffffff/00213b?text=Visa" alt="Visa" class="h-5">
+                    <img src="https://placehold.co/30x20/ffffff/00213b?text=MC" alt="MasterCard" class="h-5">
+                    <img src="https://placehold.co/30x20/ffffff/00213b?text=Amex" alt="Amex" class="h-5">
+                    <img src="https://placehold.co/30x20/ffffff/00213b?text=PayP" alt="PayPal" class="h-5">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Copyright -->
+    <div class="bg-[#001729] py-4 text-center text-xs text-hot-footer-text">
+        <p>&copy; 2014 HotSpringspaservice.com. All Rights Reserved.</p>
+    </div>
+
+    <!-- Scripts for jQuery Validation and Animations -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 1. Form Validation for Newsletter
+            $('#newsletter-form').on('submit', function(e) {
+                e.preventDefault(); // Prevent default form submission
+                
+                var emailInput = $('#email-input').val().trim();
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                $('#email-error').hide();
+                $('#email-success').hide();
+                $('#email-input').removeClass('border-error');
+
+                if (emailInput === '') {
+                    $('#email-error').text('Email address cannot be empty.').show();
+                    $('#email-input').addClass('border-error');
+                } else if (!emailRegex.test(emailInput)) {
+                    $('#email-error').text('Please enter a valid email address.').show();
+                    $('#email-input').addClass('border-error');
+                } else {
+                    // Success simulation
+                    $('#email-success').text('Thank you for subscribing!').show();
+                    $('#email-input').val(''); // Clear field
+                    
+                    // Hide success message after 3 seconds
+                    setTimeout(function() {
+                        $('#email-success').fadeOut();
+                    }, 3000);
+                }
+            });
+
+            // 2. Scroll Animation (Fade in elements as they appear)
+            function checkFadeIn() {
+                $('.fade-in').each(function() {
+                    var elementTop = $(this).offset().top;
+                    var windowBottom = $(window).scrollTop() + $(window).height();
+                    
+                    if (windowBottom > elementTop + 50) {
+                        $(this).addClass('visible');
+                    }
+                });
+            }
+
+            // Initial check and bind to scroll
+            checkFadeIn();
+            $(window).on('scroll', checkFadeIn);
+
+            // 3. Simple Cart interactiveness
+            $('.fa-cart-shopping').parent().parent().on('mouseenter', function() {
+                $(this).addClass('bg-gray-50');
+            }).on('mouseleave', function() {
+                $(this).removeClass('bg-gray-50');
+            });
+        });
+    </script>
+</body>
+</html>
